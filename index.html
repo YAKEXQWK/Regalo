@@ -1,0 +1,399 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <title>🎃 Caja Misteriosa de Halloween ( 7 Artículos) 🦇</title>
+    <style>
+        :root {
+            --bg-color: #09090b;
+            --accent-color: #7c3aed;
+            --naranja-hallow: #f59e0b;
+            --texto-principal: #f8fafc;
+        }
+
+        body {
+            margin: 0;
+            min-height: 100vh;
+            background: radial-gradient(circle, #2e1065 0%, #09090b 100%);
+            color: var(--texto-principal);
+            font-family: 'Courier New', Courier, monospace;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            overflow-x: hidden;
+            user-select: none;
+            padding: 15px;
+            box-sizing: border-box;
+        }
+
+        .contenedor-caja {
+            background: rgba(15, 23, 42, 0.95);
+            border: 3px solid var(--accent-color);
+            border-radius: 20px;
+            padding: 20px;
+            max-width: 380px;
+            width: 100%;
+            text-align: center;
+            box-shadow: 0 0 35px rgba(124, 58, 237, 0.6), inset 0 0 20px rgba(245, 158, 11, 0.2);
+            position: relative;
+        }
+
+        h1 {
+            font-size: 16px;
+            color: var(--naranja-hallow);
+            margin-top: 0;
+            text-shadow: 0 0 10px rgba(245, 158, 11, 0.5);
+        }
+
+        .subtitulo {
+            font-size: 10px;
+            color: #cbd5e1;
+            margin-bottom: 12px;
+        }
+
+        /* CAJA VISUAL */
+        .caja-grafica {
+            font-size: 70px;
+            margin: 10px 0;
+            cursor: pointer;
+            transition: transform 0.15s ease;
+            filter: drop-shadow(0 0 12px var(--naranja-hallow));
+            animation: flotarCaja 3s ease-in-out infinite;
+        }
+
+        .caja-grafica.bloqueada {
+            cursor: not-allowed;
+            animation: none;
+            filter: grayscale(0.6) brightness(0.6);
+        }
+
+        .caja-grafica:active:not(.bloqueada) {
+            transform: scale(0.9) rotate(-4deg);
+        }
+
+        @keyframes flotarCaja {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-5px); }
+        }
+
+        .estado-texto {
+            font-size: 11px;
+            font-weight: bold;
+            color: #a78bfa;
+            margin-bottom: 12px;
+            min-height: 35px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        /* PROGRESO DE TOQUES (Sello + 4 Artículos) */
+        .progreso-toques {
+            display: flex;
+            justify-content: center;
+            gap: 5px;
+            margin-bottom: 12px;
+        }
+
+        .punto-toque {
+            width: 22px;
+            height: 22px;
+            border-radius: 50%;
+            background: #1e293b;
+            border: 2px solid #475569;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 9px;
+            color: #64748b;
+            font-weight: bold;
+        }
+
+        .punto-toque.activo {
+            background: var(--accent-color);
+            border-color: #c084fc;
+            color: white;
+            box-shadow: 0 0 6px #a855f7;
+        }
+
+        .punto-toque.completado {
+            background: #059669;
+            border-color: #34d399;
+            color: white;
+        }
+
+        /* HISTORIAL DE PREMIOS */
+        .seccion-premios {
+            background: rgba(30, 41, 59, 0.8);
+            border-radius: 10px;
+            padding: 8px;
+            text-align: left;
+            max-height: 130px;
+            overflow-y: auto;
+            border: 1px solid #334155;
+        }
+
+        .seccion-premios h3 {
+            font-size: 10px;
+            color: #38bdf8;
+            margin: 0 0 4px 0;
+            text-align: center;
+        }
+
+        .lista-premios {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+            font-size: 10px;
+        }
+
+        .lista-premios li {
+            padding: 3px 5px;
+            margin-bottom: 3px;
+            background: rgba(15, 23, 42, 0.7);
+            border-radius: 5px;
+            border-left: 3px solid var(--naranja-hallow);
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .btn-borrar {
+            background: transparent;
+            color: #ef4444;
+            border: 1px dashed #ef4444;
+            padding: 5px;
+            font-size: 9px;
+            border-radius: 6px;
+            cursor: pointer;
+            margin-top: 10px;
+            width: 100%;
+        }
+
+        /* MODAL DE RESUMEN */
+        .modal-overlay {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.85);
+            display: flex; align-items: center; justify-content: center;
+            z-index: 200; padding: 15px; box-sizing: border-box;
+        }
+        .modal-contenido {
+            background: #1e293b; border: 3px solid var(--naranja-hallow); border-radius: 16px;
+            padding: 15px; width: 100%; max-width: 300px; text-align: center;
+        }
+        .btn-accion {
+            background: linear-gradient(135deg, var(--naranja-hallow), #d97706);
+            color: white; border: none; padding: 8px 12px; font-weight: bold; font-size: 11px;
+            border-radius: 8px; cursor: pointer; margin-top: 10px; width: 100%;
+        }
+        .oculto { display: none !important; }
+
+        .decoracion-fondo {
+            position: fixed; font-size: 22px; opacity: 0.15; pointer-events: none; z-index: -1;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="decoracion-fondo" style="top: 10%; left: 10%;">🦇</div>
+    <div class="decoracion-fondo" style="top: 15%; right: 15%;">🎃</div>
+    <div class="decoracion-fondo" style="bottom: 12%; left: 15%;">👻</div>
+    <div class="decoracion-fondo" style="bottom: 20%; right: 10%;">🕷️</div>
+
+    <div class="contenedor-caja">
+        <h1>🎃 Caja Misteriosa de Halloween 🦇</h1>
+        <div class="subtitulo">¡Rompe el sello y reclama tus 4 tesoros aleatorios!</div>
+
+        <!-- Indicadores de estado: Sello (0) + 4 Artículos (1 a 4) -->
+        <div class="progreso-toques" id="indicadores">
+            <div class="punto-toque" id="p-0" title="Sello">🔒</div>
+            <div class="punto-toque" id="p-1">1</div>
+            <div class="punto-toque" id="p-2">2</div>
+            <div class="punto-toque" id="p-3">3</div>
+            <div class="punto-toque" id="p-4">4</div>
+        </div>
+
+        <!-- Elemento de la caja -->
+        <div class="caja-grafica" id="caja-magica" onclick="tocarCaja()">📦</div>
+        <div class="estado-texto" id="texto-estado">Cargando caja misteriosa...</div>
+
+        <!-- Botín acumulado -->
+        <div class="seccion-premios">
+            <h3>📜 Tesoros Obtenidos (4 Artículos)</h3>
+            <ul class="lista-premios" id="lista-inventario">
+                <li style="color: #64748b; border-color: #475569; justify-content: center;">Aún no hay premios...</li>
+            </ul>
+        </div>
+
+        <button class="btn-borrar" onclick="reiniciarCaja()">🗑️ Reiniciar Caja</button>
+    </div>
+
+    <!-- MODAL FINAL -->
+    <div id="modal-resumen" class="modal-overlay oculto">
+        <div class="modal-contenido">
+            <div style="font-size: 30px; margin-bottom: 2px;">🎃🏆🦇</div>
+            <h2 style="color: var(--naranja-hallow); font-size: 15px; margin-top: 0;" id="titulo-modal">¡Caja Completada!</h2>
+            <p style="font-size: 10px; color: #cbd5e1; margin-bottom: 8px;">Aquí están tus 4 artículos asegurados:</p>
+            
+            <div class="seccion-premios" style="max-height: 130px; margin-bottom: 8px;">
+                <ul class="lista-premios" id="lista-modal-resumen"></ul>
+            </div>
+
+            <button class="btn-accion" onclick="cerrarModal()">¡Genial, Entendido! ✨</button>
+        </div>
+    </div>
+
+    <script>
+        // Lista exacta con tus premios y probabilidades de Halloween
+        const premiosDisponibles = [
+            { nombre: "Huevo retro", prob: 30 },
+            { nombre: "Huevo jubilado", prob: 20 },
+            { nombre: "Huevo básico", prob: 60 },
+            { nombre: "Huevo roto", prob: 50 },
+            { nombre: "Huevo mascota", prob: 30 },
+            { nombre: "Huevo extinto", prob: 35 },
+            { nombre: "Huevo hada", prob: 65 },
+            { nombre: "Caja 2D", prob: 5 },
+            { nombre: "Regalo pequeño", prob: 70 },
+            { nombre: "Regalo mediano", prob: 40 },
+            { nombre: "Regalo grande", prob: 9 },
+            { nombre: "Poción bonus bucks", prob: 15 },
+            { nombre: "Poción XP bonus", prob: 15 },
+            { nombre: "Pet periquito bruja", prob: 30 },
+            { nombre: "Jerbo gelatinoso", prob: 10 },
+            { nombre: "Conechoco", prob: 10 },
+            { nombre: "Chocodrilo", prob: 9 },
+            { nombre: "Iguana de gomita", prob: 10 },
+            { nombre: "Caja de patitos", prob: 9 },
+            { nombre: "Caja de bellotas", prob: 5 },
+            { nombre: "Caja de conechocos", prob: 4 },
+            { nombre: "Huevo de cristal", prob: 1 }
+        ];
+
+        let estadoCaja = {
+            cajaAbierta: false,    // false = sello cerrado, true = sello roto
+            premiosGanados: [],   // Array con los 4 premios
+            toquesPremios: 0      // De 0 a 4 toques
+        };
+
+        window.addEventListener('load', () => {
+            let guardado = localStorage.getItem('caja_halloween_4art_save');
+            if (guardado) estadoCaja = JSON.parse(guardado);
+            actualizarInterfaz();
+            if (estadoCaja.toquesPremios >= 4) mostrarModal(true);
+        });
+
+        function tocarCaja() {
+            if (estadoCaja.toquesPremios >= 4) return;
+
+            if (!estadoCaja.cajaAbierta) {
+                // Toque 0: Romper el sello
+                estadoCaja.cajaAbierta = true;
+                guardar();
+                actualizarInterfaz();
+                return;
+            }
+
+            if (estadoCaja.cajaAbierta && estadoCaja.toquesPremios < 4) {
+                // Toques 1 al 4: Otorgar premio aleatorio
+                let premio = sortearPremio();
+                estadoCaja.premiosGanados.push(premio);
+                estadoCaja.toquesPremios++;
+                guardar();
+
+                let cajaEl = document.getElementById('caja-magica');
+                cajaEl.style.transform = "scale(1.15) rotate(5deg)";
+                setTimeout(() => { cajaEl.style.transform = "scale(1) rotate(0deg)"; }, 150);
+
+                actualizarInterfaz();
+
+                if (estadoCaja.toquesPremios >= 4) {
+                    setTimeout(() => { mostrarModal(false); }, 500);
+                }
+            }
+        }
+
+        function sortearPremio() {
+            let candidatos = [];
+            premiosDisponibles.forEach(item => {
+                if (Math.random() * 100 <= item.prob) candidatos.push(item.nombre);
+            });
+            if (candidatos.length === 0) return "Huevo básico";
+            return candidatos[Math.floor(Math.random() * candidatos.length)];
+        }
+
+        function actualizarInterfaz() {
+            let cajaEl = document.getElementById('caja-magica');
+            let textoEl = document.getElementById('texto-estado');
+            let listaInv = document.getElementById('lista-inventario');
+
+            if (!estadoCaja.cajaAbierta) {
+                cajaEl.innerText = "📦";
+                cajaEl.classList.remove('bloqueada');
+                textoEl.innerText = "🔒 ¡Toca la caja para romper el sello mágico!";
+            } else if (estadoCaja.toquesPremios < 4) {
+                cajaEl.innerText = "🎃🎁";
+                cajaEl.classList.remove('bloqueada');
+                textoEl.innerText = `🎁 Toque (${estadoCaja.toquesPremios}/4) para reclamar artículo.`;
+            } else {
+                cajaEl.innerText = "👻🕸️";
+                cajaEl.classList.add('bloqueada');
+                textoEl.innerText = "🎉 ¡Caja vaciada! Los 4 tesoros son tuyos.";
+            }
+
+            // Puntos de indicadores
+            let p0 = document.getElementById('p-0');
+            if (estadoCaja.cajaAbierta) { p0.innerText = "✔"; p0.className = "punto-toque completado"; }
+            else { p0.innerText = "🔒"; p0.className = "punto-toque activo"; }
+
+            for (let i = 1; i <= 4; i++) {
+                let pEl = document.getElementById(`p-${i}`);
+                pEl.className = "punto-toque";
+                pEl.innerText = i;
+                if (i <= estadoCaja.toquesPremios) { pEl.className = "punto-toque completado"; pEl.innerText = "✔"; }
+                else if (estadoCaja.cajaAbierta && i === estadoCaja.toquesPremios + 1) { pEl.className = "punto-toque activo"; }
+            }
+
+            listaInv.innerHTML = "";
+            if (estadoCaja.premiosGanados.length === 0) {
+                listaInv.innerHTML = `<li style="color: #64748b; border-color: #475569; justify-content: center;">Aún no hay premios...</li>`;
+            } else {
+                estadoCaja.premiosGanados.forEach((p, idx) => {
+                    let li = document.createElement('li');
+                    li.innerHTML = `<b>#${idx+1}:</b> ${p}`;
+                    listaInv.appendChild(li);
+                });
+            }
+        }
+
+        function mostrarModal(reingreso) {
+            let modal = document.getElementById('modal-resumen');
+            let listaModal = document.getElementById('lista-modal-resumen');
+            let titulo = document.getElementById('titulo-modal');
+
+            titulo.innerText = reingreso ? "🦇 ¡Tus Tesoros Guardados!" : "🎉 ¡Caja Completada!";
+            listaModal.innerHTML = "";
+            estadoCaja.premiosGanados.forEach((p, idx) => {
+                let li = document.createElement('li');
+                li.innerHTML = `<b>#${idx+1}:</b> ${p}`;
+                listaModal.appendChild(li);
+            });
+            modal.classList.remove('oculto');
+        }
+
+        function cerrarModal() { document.getElementById('modal-resumen').classList.add('oculto'); }
+        function guardar() { localStorage.setItem('caja_halloween_4art_save', JSON.stringify(estadoCaja)); }
+
+        function reiniciarCaja() {
+            if (confirm("¿Reiniciar la caja misteriosa y perder los 4 artículos actuales?")) {
+                localStorage.removeItem('caja_halloween_4art_save');
+                estadoCaja = { cajaAbierta: false, premiosGanados: [], toquesPremios: 0 };
+                actualizarInterfaz();
+                alert("¡Caja restablecida!");
+            }
+        }
+    </script>
+</body>
+</html>
